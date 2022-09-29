@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public float maxHealth = 100f;
     public MeshRenderer model;
     public MeshRenderer badgun;
-    public Vector3 realPosition; //for lerping
+    public Vector3 realPosition; 
 
     public UIManager ui;
 
