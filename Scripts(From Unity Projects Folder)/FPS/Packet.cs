@@ -24,26 +24,26 @@ public enum ClientPackets
 
 public class Packet : IDisposable
 {
-    private List<byte> buffer;
+    private List<byte> bytespace;
     private byte[] readableBuffer;
     private int readPos;
 
     public Packet()
     {
-        buffer = new List<byte>(); 
+        bytespace = new List<byte>(); 
         readPos = 0; 
     }
 
     public void SetBytes(byte[] _data)
     {
         Write(_data);
-        readableBuffer = buffer.ToArray();
+        readablebytespace = buffer.ToArray();
     }
     
     
     public Packet(int _id)
     {
-        buffer = new List<byte>(); 
+        bytespace= new List<byte>(); 
         readPos = 0; 
 
         Write(_id); 
@@ -62,7 +62,7 @@ public class Packet : IDisposable
 
     public byte[] ToArray()
     {
-        readableBuffer = buffer.ToArray();
+        readablebytespace= buffer.ToArray();
         return readableBuffer;
     }
 
@@ -81,7 +81,7 @@ public class Packet : IDisposable
         if (_shouldReset)
         {
             buffer.Clear(); 
-            readableBuffer = null;
+            readablebytespace= null;
             readPos = 0; 
         }
         else
@@ -93,7 +93,7 @@ public class Packet : IDisposable
     
     public Packet(byte[] _data)
     {
-        buffer = new List<byte>(); 
+        bytespace= new List<byte>(); 
         readPos = 0; 
 
         SetBytes(_data);
@@ -303,8 +303,8 @@ public class Packet : IDisposable
         {
             if (_disposing)
             {
-                buffer = null;
-                readableBuffer = null;
+                bytespace= null;
+                readablebytespace= null;
                 readPos = 0;
             }
 
