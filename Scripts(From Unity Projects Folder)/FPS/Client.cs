@@ -25,7 +25,7 @@ public class Client : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.Log("Instance already exists, destroying object!");
+            Debug.Log("Destroying object, already exists!");
             Destroy(this);
         }
     }
