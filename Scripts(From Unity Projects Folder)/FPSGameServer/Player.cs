@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +36,6 @@ public class Player : MonoBehaviour
         inputs = new bool[6];
     }
 
-    /// <summary>Processes player input and moves the player.</summary>
     public void FixedUpdate()
     {
         if (health <= 0f)
@@ -70,8 +69,6 @@ public class Player : MonoBehaviour
         Move(_inputDirection);
     }
 
-    /// <summary>Calculates the player's desired movement direction and moves him.</summary>
-    /// <param name="_inputDirection"></param>
     private void Move(Vector2 _inputDirection)
     {
         Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
@@ -94,9 +91,6 @@ public class Player : MonoBehaviour
         ServerSend.PlayerRotation(this);
     }
 
-    /// <summary>Updates the player input with newly received input.</summary>
-    /// <param name="_inputs">The new key inputs.</param>
-    /// <param name="_rotation">The new rotation.</param>
     public void SetInput(bool[] _inputs, Quaternion _rotation)
     {
         inputs = _inputs;
@@ -168,7 +162,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(5f); //time it takes to respawn
+        yield return new WaitForSeconds(5f); 
 
         health = maxHealth;
         controller.enabled = true;
