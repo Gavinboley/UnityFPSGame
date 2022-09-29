@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,8 +57,8 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player is not going where he should");
-            return new Vector3(48f, 3f, 48f);
+            Debug.Log("Invalid Location");
+            return new Vector3(49f, 5f, 49f);
         }
     }
 
