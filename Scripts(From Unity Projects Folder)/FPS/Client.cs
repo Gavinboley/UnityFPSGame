@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
@@ -9,12 +9,9 @@ public class Client : MonoBehaviour
 {
     public static Client instance;
     public static int dataBufferSize = 4096;
-
-    public string ip = "";
-    public int port = 18154;
+    public string ip = ""; public int port = 18154;
     public int myId = 0;
-    public TCP tcp;
-    public UDP udp;
+    public TCP tcp; public UDP udp;
 
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
@@ -41,16 +38,15 @@ public class Client : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Disconnect(); // Disconnect when the game is closed
+        Disconnect(); // Disconnect when closed
     }
 
-    /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
         InitializeClientData();
 
         isConnected = true;
-        tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
+        tcp.Connect(); // Connect tcp, udp next
     }
 
     public void ChangeConnectIp(string ip)
@@ -68,7 +64,6 @@ public class Client : MonoBehaviour
         private Packet receivedData;
         private byte[] receiveBuffer;
 
-        /// <summary>Attempts to connect to the server via TCP.</summary>
         public void Connect()
         {
             socket = new TcpClient
@@ -81,7 +76,6 @@ public class Client : MonoBehaviour
             socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
         }
 
-        /// <summary>Initializes the newly connected client's TCP-related info.</summary>
         private void ConnectCallback(IAsyncResult _result)
         {
             socket.EndConnect(_result);
@@ -98,15 +92,13 @@ public class Client : MonoBehaviour
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
         }
 
-        /// <summary>Sends data to the client via TCP.</summary>
-        /// <param name="_packet">The packet to send.</param>
         public void SendData(Packet _packet)
         {
             try
             {
                 if (socket != null)
                 {
-                    stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null); // Send data to server
+                    stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null); 
                 }
             }
             catch (Exception _ex)
@@ -115,7 +107,6 @@ public class Client : MonoBehaviour
             }
         }
 
-        /// <summary>Reads incoming data from the stream.</summary>
         private void ReceiveCallback(IAsyncResult _result)
         {
             try
@@ -130,7 +121,7 @@ public class Client : MonoBehaviour
                 byte[] _data = new byte[_byteLength];
                 Array.Copy(receiveBuffer, _data, _byteLength);
 
-                receivedData.Reset(HandleData(_data)); // Reset receivedData if all data was handled
+                receivedData.Reset(HandleData(_data));
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
             }
             catch
@@ -139,8 +130,6 @@ public class Client : MonoBehaviour
             }
         }
 
-        /// <summary>Prepares received data to be used by the appropriate packet handler methods.</summary>
-        /// <param name="_data">The recieved data.</param>
         private bool HandleData(byte[] _data)
         {
             int _packetLength = 0;
@@ -149,50 +138,44 @@ public class Client : MonoBehaviour
 
             if (receivedData.UnreadLength() >= 4)
             {
-                // If client's received data contains a packet
                 _packetLength = receivedData.ReadInt();
                 if (_packetLength <= 0)
                 {
-                    // If packet contains no data
-                    return true; // Reset receivedData instance to allow it to be reused
+                    return true; //no data
                 }
             }
 
             while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
             {
-                // While packet contains data AND packet data length doesn't exceed the length of the packet we're reading
                 byte[] _packetBytes = receivedData.ReadBytes(_packetLength);
                 ThreadManager.ExecuteOnMainThread(() =>
                 {
                     using (Packet _packet = new Packet(_packetBytes))
                     {
                         int _packetId = _packet.ReadInt();
-                        packetHandlers[_packetId](_packet); // Call appropriate method to handle the packet
+                        packetHandlers[_packetId](_packet); 
                     }
                 });
 
-                _packetLength = 0; // Reset packet length
+                _packetLength = 0; 
                 if (receivedData.UnreadLength() >= 4)
                 {
-                    // If client's received data contains another packet
                     _packetLength = receivedData.ReadInt();
                     if (_packetLength <= 0)
                     {
-                        // If packet contains no data
-                        return true; // Reset receivedData instance to allow it to be reused
+                        return true; //no data
                     }
                 }
             }
 
             if (_packetLength <= 1)
             {
-                return true; // Reset receivedData instance to allow it to be reused
+                return true; 
             }
 
             return false;
         }
 
-        /// <summary>Disconnects from the server and cleans up the TCP connection.</summary>
         private void Disconnect()
         {
             instance.Disconnect();
@@ -214,8 +197,6 @@ public class Client : MonoBehaviour
             endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
         }
 
-        /// <summary>Attempts to connect to the server via UDP.</summary>
-        /// <param name="_localPort">The port number to bind the UDP socket to.</param>
         public void Connect(int _localPort)
         {
             socket = new UdpClient(_localPort);
@@ -229,13 +210,11 @@ public class Client : MonoBehaviour
             }
         }
 
-        /// <summary>Sends data to the client via UDP.</summary>
-        /// <param name="_packet">The packet to send.</param>
         public void SendData(Packet _packet)
         {
             try
             {
-                _packet.InsertInt(instance.myId); // Insert the client's ID at the start of the packet
+                _packet.InsertInt(instance.myId); 
                 if (socket != null)
                 {
                     socket.BeginSend(_packet.ToArray(), _packet.Length(), null, null);
@@ -247,7 +226,6 @@ public class Client : MonoBehaviour
             }
         }
 
-        /// <summary>Receives incoming UDP data.</summary>
         private void ReceiveCallback(IAsyncResult _result)
         {
             try
@@ -269,8 +247,6 @@ public class Client : MonoBehaviour
             }
         }
 
-        /// <summary>Prepares received data to be used by the appropriate packet handler methods.</summary>
-        /// <param name="_data">The recieved data.</param>
         private void HandleData(byte[] _data)
         {
             using (Packet _packet = new Packet(_data))
@@ -284,12 +260,11 @@ public class Client : MonoBehaviour
                 using (Packet _packet = new Packet(_data))
                 {
                     int _packetId = _packet.ReadInt();
-                    packetHandlers[_packetId](_packet); // Call appropriate method to handle the packet
+                    packetHandlers[_packetId](_packet); 
                 }
             });
         }
 
-        /// <summary>Disconnects from the server and cleans up the UDP connection.</summary>
         private void Disconnect()
         {
             instance.Disconnect();
@@ -299,7 +274,6 @@ public class Client : MonoBehaviour
         }
     }
 
-    /// <summary>Initializes all necessary client data.</summary>
     private void InitializeClientData()
     {
         packetHandlers = new Dictionary<int, PacketHandler>()
@@ -315,7 +289,6 @@ public class Client : MonoBehaviour
         Debug.Log("Initialized packets.");
     }
 
-    /// <summary>Disconnects from the server and stops all network traffic.</summary>
     private void Disconnect()
     {
         if (isConnected)
