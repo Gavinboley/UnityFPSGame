@@ -57,11 +57,6 @@ public class Packet : IDisposable
         readableBuffer = buffer.ToArray();
     }
 
-    public void WriteLength()
-    {
-        buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
-    }
-
     public void InsertInt(int _value)
     {
         buffer.InsertRange(0, BitConverter.GetBytes(_value)); 
@@ -95,6 +90,11 @@ public class Packet : IDisposable
         {
             readPos -= 4; 
         }
+    }
+    
+    public void WriteLength()
+    {
+        buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
     }
     #endregion
 
