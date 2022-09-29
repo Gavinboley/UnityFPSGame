@@ -34,27 +34,19 @@ public class Packet : IDisposable
         readPos = 0; 
     }
 
+    public void SetBytes(byte[] _data)
+    {
+        Write(_data);
+        readableBuffer = buffer.ToArray();
+    }
+    
+    
     public Packet(int _id)
     {
         buffer = new List<byte>(); 
         readPos = 0; 
 
         Write(_id); 
-    }
-
-    public Packet(byte[] _data)
-    {
-        buffer = new List<byte>(); 
-        readPos = 0; 
-
-        SetBytes(_data);
-    }
-
-    #region Functions
-    public void SetBytes(byte[] _data)
-    {
-        Write(_data);
-        readableBuffer = buffer.ToArray();
     }
 
  
@@ -97,7 +89,15 @@ public class Packet : IDisposable
             readPos -= 4; 
         }
     }
-    #endregion
+    
+    
+    public Packet(byte[] _data)
+    {
+        buffer = new List<byte>(); 
+        readPos = 0; 
+
+        SetBytes(_data);
+    }
 
     #region Write Data
     public void Write(byte _value)
