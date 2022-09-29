@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
@@ -41,9 +40,5 @@ public class UIManager : MonoBehaviour
     {
         healthValue.text = health.ToString();
     }
-
-
-    /*         var player = GetComponent<PlayerManager>();
-        healthValue.text = player.health.ToString(); */
 }
  
