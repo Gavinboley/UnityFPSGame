@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         SendInputToServer();
     }
-
-    /// <summary>Sends player input to the server.</summary>
+    
     private void SendInputToServer()
     {
         bool[] _inputs = new bool[]
