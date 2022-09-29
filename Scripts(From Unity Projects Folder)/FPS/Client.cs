@@ -7,8 +7,6 @@ using System;
 
 public class Client : MonoBehaviour
 {
-    public static Client instance;
-    public static int dataBufferSize = 4096;
     public string ip = ""; public int port = 18154;
     public int myId = 0;
     public TCP tcp; public UDP udp;
@@ -29,6 +27,9 @@ public class Client : MonoBehaviour
             Destroy(this);
         }
     }
+    
+    public static Client instance;
+    public static int dataBufferSize = 4096;
 
     private void Start()
     {
