@@ -35,10 +35,17 @@ public class Client : MonoBehaviour
         tcp = new TCP();
         udp = new UDP();
     }
+    
+    public void ChangeConnectIp(string ip)
+    {
+        this.ip = ip;
+        tcp = new TCP();
+        udp = new UDP();
+    }
 
     private void OnApplicationQuit()
     {
-        Disconnect(); // Disconnect when closed
+        Disconnect(); 
     }
 
     public void ConnectToServer()
@@ -46,14 +53,7 @@ public class Client : MonoBehaviour
         InitializeClientData();
 
         isConnected = true;
-        tcp.Connect(); // Connect tcp, udp next
-    }
-
-    public void ChangeConnectIp(string ip)
-    {
-        this.ip = ip;
-        tcp = new TCP();
-        udp = new UDP();
+        tcp.Connect(); 
     }
 
     public class TCP
@@ -103,7 +103,7 @@ public class Client : MonoBehaviour
             }
             catch (Exception _ex)
             {
-                Debug.Log($"Error sending data to server via TCP: {_ex}");
+                Debug.Log($"Bad TCP: {_ex}");
             }
         }
 
@@ -141,7 +141,7 @@ public class Client : MonoBehaviour
                 _packetLength = receivedData.ReadInt();
                 if (_packetLength <= 0)
                 {
-                    return true; //no data
+                    return true; 
                 }
             }
 
@@ -163,7 +163,7 @@ public class Client : MonoBehaviour
                     _packetLength = receivedData.ReadInt();
                     if (_packetLength <= 0)
                     {
-                        return true; //no data
+                        return true; 
                     }
                 }
             }
@@ -222,7 +222,7 @@ public class Client : MonoBehaviour
             }
             catch (Exception _ex)
             {
-                Debug.Log($"Error sending data to server via UDP: {_ex}");
+                Debug.Log($"Bad UDP: {_ex}");
             }
         }
 
@@ -286,7 +286,7 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.playerHealth, ClientHandle.PlayerHealth },
             { (int)ServerPackets.playerRespawned, ClientHandle.PlayerRespawned }
         };
-        Debug.Log("Initialized packets.");
+        Debug.Log("Initialized.");
     }
 
     private void Disconnect()
@@ -297,7 +297,7 @@ public class Client : MonoBehaviour
             tcp.socket.Close();
             udp.socket.Close();
 
-            Debug.Log("Disconnected from server.");
+            Debug.Log("Disconnected.");
         }
     }
 }
