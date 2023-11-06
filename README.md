@@ -1,5 +1,5 @@
 # UnityFPSGame
-A hobby project I created in 2019 where i built my own FPS game's netcode from the ground up because i wanted to learn more about how it works. The gameplay/project itself is not great but the main purpose of it was to build a netcode structure to understand how it works as a prototype.
+A hobby prototype I created in 2019 where i built my own FPS game's netcode from the ground up because i wanted to learn more about how it works. The gameplay/project itself is not great but the main purpose of it was to build a netcode structure to understand how it works as a prototype.
 
 TO PLAY:
 1. Install both builds, client and server, and extract them.
